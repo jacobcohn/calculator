@@ -1,19 +1,24 @@
-const decimalsAllowed = 3;
+const decimalsAllowed = 5;
 
 function operate(operator, a, b) {
     let num;
+    let modifiedA = Number(a);
+    let modifiedB = Number(b);
     switch (operator) {
         case 'add': 
-            num = a + b;
+            num = modifiedA + modifiedB;
             break;
         case 'subtract':
-            num = a - b;
+            num = modifiedA - modifiedB;
             break;
         case 'multiply':
-            num = a * b;
+            num = modifiedA * modifiedB;
             break;
         case 'divide':
-            num = a / b;
+            if (modifiedB === 0) {
+                return 'You Can\'t Do That!';
+            }
+            num = modifiedA / modifiedB;
             break;
     };
     num = Math.round(num * (10 ** decimalsAllowed)) / (10 ** decimalsAllowed);
@@ -39,25 +44,38 @@ numbers.forEach(item => {
         if (e.target.value === '.' && displayArray.includes('.')) {
             return; 
         };
-        displayArray.push(e.target.value);
-        currentDisplay = Number(displayArray.join(''));
-        display.innerHTML = currentDisplay;
+        if (e.target.value === '.' && displayArray.length === 0) {
+            displayArray.push('0');
+        }
+        if (displayArray.length < 20) {
+            displayArray.push(e.target.value);
+            currentDisplay = displayArray.join('');
+            display.innerHTML = currentDisplay;
+        } else return;
     });
 });
 
 operations.forEach(item => {
     item.addEventListener('click', e => {
+        if (operateObj.a == 'You Can\'t Do That!') {
+            clearFunction();
+            return;
+        }
         if (operateObj.a == null) {
             displayArray.splice(0, displayArray.length);
             operateObj.a = currentDisplay;
+            if (e.target.id !== 'equals') {
+                operateObj.operator = e.target.id;
+                currentDisplay = e.target.innerHTML;
+                display.innerHTML = currentDisplay;
+            }
+        } else if (e.target.id == 'equals' && operateObj.b == null && displayArray.length == 0) {
+            return;
+        } else if (operateObj.operator == null || (operateObj.b == null && displayArray.length == 0)) {
             operateObj.operator = e.target.id;
             currentDisplay = e.target.innerHTML;
             display.innerHTML = currentDisplay;
-        } else if (operateObj.operator == null) {
-            operateObj.operator = e.target.id;
-            currentDisplay = e.target.innerHTML;
-            display.innerHTML = currentDisplay;
-        } else if (operateObj.b == null) {
+        } else if (operateObj.b == null && displayArray.length > 0) {
             displayArray.splice(0, displayArray.length);
             operateObj.b = currentDisplay;
             currentDisplay = operate(operateObj.operator, operateObj.a, operateObj.b);
@@ -70,4 +88,33 @@ operations.forEach(item => {
             operateObj.operator = null;
         };
     });
+});
+
+const clearBtn = document.querySelector('#clear-button');
+
+clearBtn.addEventListener('click', () => {
+    clearFunction();
+});
+
+function clearFunction() {
+    displayArray.splice(0, displayArray.length);
+    operateObj.a = null;
+    operateObj.operator = null;
+    operateObj.b = null;
+    display.innerHTML = 0;
+}
+
+const backBtn = document.querySelector('#back-button');
+
+backBtn.addEventListener('click', () => {
+    if (operateObj.operator && displayArray == null) {
+        return;
+    }
+    displayArray.pop();
+    if (displayArray.length == 0) {
+        display.innerHTML = 0;
+    } else {
+        currentDisplay = Number(displayArray.join(''));
+        display.innerHTML = currentDisplay;
+    }
 });
