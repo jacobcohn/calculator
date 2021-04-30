@@ -86,8 +86,11 @@ operations.forEach(item => {
                 currentDisplay = e.target.innerHTML;
                 display.innerHTML = currentDisplay;
             }
+        // if user switches to equals button after pressing another operations button
+        } else if (e.target.id == 'equals' && operateObj.b == null && displayArray.length == 0) {
+            return;
         // if user switches to another operations button before starting next number
-        } else if (operateObj.operator == null) {
+        } else if  (operateObj.b == null && displayArray.length == 0) {
             operateObj.operator = e.target.id;
             currentDisplay = e.target.innerHTML;
             display.innerHTML = currentDisplay;
