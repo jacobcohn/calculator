@@ -1,4 +1,5 @@
 const decimalsAllowed = 5;
+const digitsAllowed = 10;
 
 function operate(operator, a, b) {
     let num;
@@ -16,7 +17,7 @@ function operate(operator, a, b) {
             break;
         case 'divide':
             if (modifiedB === 0) {
-                return 'You Can\'t Do That!';
+                return 'Can\'t Do That!';
             }
             num = modifiedA / modifiedB;
             break;
@@ -47,7 +48,7 @@ numbers.forEach(item => {
         if (e.target.value === '.' && displayArray.length === 0) {
             displayArray.push('0');
         }
-        if (displayArray.length < 20) {
+        if (displayArray.length < digitsAllowed) {
             displayArray.push(e.target.value);
             currentDisplay = displayArray.join('');
             display.innerHTML = currentDisplay;
@@ -57,13 +58,16 @@ numbers.forEach(item => {
 
 operations.forEach(item => {
     item.addEventListener('click', e => {
-        if (operateObj.a == 'You Can\'t Do That!') {
+        if (operateObj.a == 'Can\'t Do That!' || operateObj.a == 'Screen Too Small!') {
             clearFunction();
             return;
         }
         if (operateObj.a == null) {
             displayArray.splice(0, displayArray.length);
             operateObj.a = currentDisplay;
+            if (displayArray == []) {
+                return;
+            }
             if (e.target.id !== 'equals') {
                 operateObj.operator = e.target.id;
                 currentDisplay = e.target.innerHTML;
@@ -87,6 +91,13 @@ operations.forEach(item => {
         if (operateObj.operator == 'equals') {
             operateObj.operator = null;
         };
+        // need to make it operateObj.a an array before figuring out it is too big
+        const operateObjAArray = operateObj.a.toString().split('');
+        if (operateObjAArray.length > digitsAllowed && operateObjAArray[0] !== 'C') {
+            currentDisplay = 'Screen Too Small!';
+            display.innerHTML = currentDisplay;
+            operateObj.a = currentDisplay;
+        }
     });
 });
 

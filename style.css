@@ -1,20 +1,22 @@
 body {
-    background: blue;
+    background: #583d72;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 #calculator {
-    background: yellow;
-    width: 60vmin;
-    height: 80vmin;
+    background: #ff8474;
+    width: max(420px, 60vmin);
+    height: max(560px, 80vmin);
     margin: auto;
     margin-top: 2%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 3%;
 }
 
 #calculator-container {
@@ -29,6 +31,10 @@ body {
 /* all in calculator-container */
 #display-div {
     grid-area: 1 / 1 / 2 / 5;
+    background: #ffc996;
+    border-radius: 10px;
+    margin: 3%;
+    padding: none;
 }
 
 #extras-div {
@@ -44,13 +50,38 @@ body {
     grid-template-rows: repeat(4, 1fr);
 }
 
-/* make 0 div a double */
-#number0 {
-    grid-area: 4 / 1 / 5 / 3;
-}
-
 #operations-div {
     grid-area: 2 / 4 / 7 / 5;
     display: grid;
     grid-template-rows: repeat(5, 1fr);
+}
+
+p {
+    height: 100%;
+    margin: 5px;
+    justify-content: center;
+    font-size: 60px;
+}
+
+button {
+    background: rgba(255, 201, 150, 0.7);
+    border: #ffc996 solid 3px;
+    border-radius: 10px;
+    margin: 12%;
+    font-size: 30px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+button:hover {
+    background: #ffc996;
+}
+
+#extras-div > button {
+    margin: 8%;
+}
+
+#number0 {
+    /* make 0 div a double */
+    grid-area: 4 / 1 / 5 / 3;
+    margin: 6%;
 }
